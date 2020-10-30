@@ -1,0 +1,10 @@
+{
+  "name": "app",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "cd client && npm install",
+    "build": "npm run build --prefix client",
+    "deploy:heroku": "git subtree push --prefix server heroku master",
+    "start": "docker-compose up"
+  }
+}
