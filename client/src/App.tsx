@@ -1,44 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+
+import React, { useEffect, useState } from "react";
+
 import io from "socket.io-client";
+import logo from "./logo.svg";
 
+const isDebug = true;
+const socketURL = "ws://localhost:8000";
 
+isDebug && console.log("socket url = ", socketURL);
 
-const socket =
-  window.location.hostname === "localhost"
-    ? io("ws://localhost:8000")
-    : io("wss://yeeplayer.herokuapp.com")
-
-
-
+const socket = io(socketURL, { transports: ["websocket"] });
 
 function App() {
-  useEffect(()=>{
+  const [messages, setMessages] = useState<string[]>([]);
+
+  useEffect(() => {
     socket.on("connect", function () {
-      console.log("connect")
-      socket.emit('chat-message', 'Hello qorld')
+      console.log("connected to socket");
+      socket.emit("chat-message", "Hello qorld");
+    });
 
-      })
-      //   socket.emit("connect room", id);
-  }, [])
+    //when we receive a message...
+    socket.on("chat-message", (message: string) => {
+      setMessages((m) => m.concat(message));
+    });
+  }, []);
+
   return (
-    
-
-
-    
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-       
-      </header>
-      <body>
-        <div id = "message-container"></div>
-        <form id = "send-container">
-          <input type="text" id="message-input"></input>
-            <button type ="submit" id= "send-button" >Send</button>
-        </form>
-      </body>
+      <button
+        onClick={() => {
+          socket.emit("chat-message", "i pressed a button");
+        }}
+      >
+        click me
+      </button>
+      {messages.map((message) => (
+        <div>{message}</div>
+      ))}
     </div>
   );
 }
