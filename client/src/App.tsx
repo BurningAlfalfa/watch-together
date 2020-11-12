@@ -1,7 +1,7 @@
 import "./App.css";
 
 import React, { useEffect, useState } from "react";
-
+import { Button } from '@material-ui/core';
 import io from "socket.io-client";
 import logo from "./logo.svg";
 
@@ -16,29 +16,45 @@ function App() {
   const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
-    socket.on("connect", function () {
+    function onConnect () {
       console.log("connected to socket");
-      socket.emit("chat-message", "Hello qorld");
-    });
+    }
+    socket.on("connect", onConnect);
 
-    //when we receive a message...
-    socket.on("chat-message", (message: string) => {
+   const onChatMessage = (message: string) => {
       setMessages((m) => m.concat(message));
-    });
+    }
+    //when we receive a message...
+    socket.on("chat-message", onChatMessage); 
+    return ()=>{
+      socket.off("connect",onConnect)
+      socket.off("chat-message",onChatMessage)
+    }
   }, []);
+  console.log("fasfds")
+  const [message, setMessage] = React.useState("");
 
+  const handleChangeInput = (event : React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(event.target.value);
+  };
   return (
-    <div className="App">
-      <button
-        onClick={() => {
-          socket.emit("chat-message", "i pressed a button");
-        }}
-      >
-        click me
-      </button>
-      {messages.map((message) => (
+    <div className="App"> 
+    <div className ="chatbox">
+    {messages.map((message) => (
         <div>{message}</div>
       ))}
+      </div>
+          <Button onClick={() => {
+          socket.emit("chat-message",message );
+        }}
+      >
+        Send
+         
+         </Button> 
+  <input type="text" value={message} onChange={handleChangeInput} ></input>
+
+      
+     
     </div>
   );
 }

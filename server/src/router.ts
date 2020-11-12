@@ -19,7 +19,8 @@ export class Router {
       console.log("connected socket");
       socket.on("chat-message", (message: string) => {
         console.log("got message", message);
-        socket.broadcast.emit("chat-message", message);
+        io.emit("chat-message", message);
+        // socket.broadcast.emit("chat-message", message);
       });
     });
   }
