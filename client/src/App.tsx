@@ -1,7 +1,7 @@
 import "./App.css"
 import ReactPlayer from 'react-player'
 import React, { useEffect, useState } from "react";
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import io from "socket.io-client";
 
 const isDebug = true;
@@ -41,8 +41,11 @@ function App() {
     }
 
   }, [chatboxRef]);
+  // useEffect(() =>{ //@ts-ignore
+  //   handleCommand({url:"https://www.youtube.com/watch?v=dQw4w9WgXcQ",command:"play"})
+  // },[])
    const [message, setMessage] = React.useState("");
-  const handleCommand =({command,...values}:{command:string,values: any})=>{
+  const handleCommand =({command,...values}:{command:string,values:any})=>{
       if(command === "play"){
         //@ts-ignore
         setUrl(values.url as string)
@@ -50,13 +53,20 @@ function App() {
   }
   const handleChangeInput = (event : React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
+
   };
-  
+  const keyPress = (event: React.KeyboardEvent<HTMLInputElement>) =>{
+    if(event.key === "Enter"){
+      
+      socket.emit("chat-message",message );
+       // put the ddd here
+    }
+ }
   return (
     <div className="App"> 
-    <ReactPlayer url={url} />
+    <ReactPlayer  classname="youtubePlayer" playing controls url={url} />
     <div  ref={chatboxRef} className ="chatbox">
-
+    
     {messages.map((message) => (
         <div>{message}</div>
       ))}
@@ -68,7 +78,7 @@ function App() {
         Send
          
          </Button> 
-  <input type="text" value={message} onChange={handleChangeInput} ></input>
+  <TextField onKeyDown={keyPress} type="text" value={message} onChange={handleChangeInput} ></TextField>
 
       
      
