@@ -1,9 +1,8 @@
-import "./App.css";
-
+import "./App.css"
+import ReactPlayer from 'react-player'
 import React, { useEffect, useState } from "react";
 import { Button } from '@material-ui/core';
 import io from "socket.io-client";
-import logo from "./logo.svg";
 
 const isDebug = true;
 const socketURL = "ws://localhost:8000";
@@ -14,32 +13,50 @@ const socket = io(socketURL, { transports: ["websocket"] });
 
 function App() {
   const [messages, setMessages] = useState<string[]>([]);
-
+  const chatboxRef = React.useRef<HTMLDivElement>(null)
+  const [url, setUrl] =useState<string>(); 
   useEffect(() => {
+
     function onConnect () {
       console.log("connected to socket");
     }
     socket.on("connect", onConnect);
-
+   
    const onChatMessage = (message: string) => {
       setMessages((m) => m.concat(message));
+    
+    if (chatboxRef.current){
+      
+       chatboxRef.current.scrollTo(0,chatboxRef.current.scrollHeight)
+    } 
+    
     }
     //when we receive a message...
-    socket.on("chat-message", onChatMessage); 
+    socket.on("chat-message", onChatMessage);
+    socket.on("command",handleCommand) 
     return ()=>{
       socket.off("connect",onConnect)
       socket.off("chat-message",onChatMessage)
+      socket.off("command", handleCommand)
     }
-  }, []);
-  console.log("fasfds")
-  const [message, setMessage] = React.useState("");
 
+  }, [chatboxRef]);
+   const [message, setMessage] = React.useState("");
+  const handleCommand =({command,...values}:{command:string,values: any})=>{
+      if(command === "play"){
+        //@ts-ignore
+        setUrl(values.url as string)
+      }
+  }
   const handleChangeInput = (event : React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
   };
+  
   return (
     <div className="App"> 
-    <div className ="chatbox">
+    <ReactPlayer url={url} />
+    <div  ref={chatboxRef} className ="chatbox">
+
     {messages.map((message) => (
         <div>{message}</div>
       ))}
