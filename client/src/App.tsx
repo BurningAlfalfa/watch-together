@@ -5,8 +5,10 @@ import { Button, TextField } from '@material-ui/core';
 import io from "socket.io-client";
 
 const isDebug = true;
-const socketURL = "ws://localhost:8000";
-
+const socketURL =
+  window.location.hostname === "localhost"
+    ? "ws://localhost:8000"
+    : "wss://aleo-watch-together.herokuapp.com";
 isDebug && console.log("socket url = ", socketURL);
 
 const socket = io(socketURL, { transports: ["websocket"] });
