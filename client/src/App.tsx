@@ -3,6 +3,7 @@ import ReactPlayer from 'react-player'
 import React, { useEffect, useState } from "react";
 import { Button, TextField } from '@material-ui/core';
 import io from "socket.io-client";
+import { timeStamp } from "console";
 
 const isDebug = true;
 const socketURL =
@@ -28,10 +29,10 @@ function App() {
       setMessages((m) => m.concat(message));
     
     if (chatboxRef.current){
-      
        chatboxRef.current.scrollTo(0,chatboxRef.current.scrollHeight)
     } 
     
+
     }
     //when we receive a message...
     socket.on("chat-message", onChatMessage);
@@ -53,14 +54,30 @@ function App() {
         setUrl(values.url as string)
       }
   }
-  const handleChangeInput = (event : React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(event.target.value);
-
-  };
-  const keyPress = (event: React.KeyboardEvent<HTMLInputElement>) =>{
-    if(event.key === "Enter"){
+  console.log(message);
+  const handleChangeInput = (event:React.ChangeEvent<HTMLInputElement>) => {
+    
       
-      socket.emit("chat-message",message );
+     setMessage(event.target.value);
+  };
+  
+  const keyPress = (event: React.KeyboardEvent<HTMLInputElement>) =>{
+    
+    if(event.key === "Enter"){
+
+      const timeStamp = Date.now(); 
+
+  const messageWithTime = (new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit'}).format(timeStamp))+": "+ message;
+      if(message.startsWith("!")){
+        socket.emit("chat-message", message)
+      }else{
+
+       socket.emit("chat-message",messageWithTime);
+      }
+//i need the timed to be stamped after the command is done
+//no i need to make it so that if i use command i dont do time stamp
+
+      setMessage("");
        // put the ddd here
     }
  }
@@ -68,7 +85,6 @@ function App() {
     <div className="App"> 
     <ReactPlayer  classname="youtubePlayer" playing controls url={url} />
     <div  ref={chatboxRef} className ="chatbox">
-    
     {messages.map((message) => (
         <div>{message}</div>
       ))}

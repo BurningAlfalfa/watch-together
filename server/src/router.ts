@@ -9,6 +9,7 @@ const app = express();
 
 const httpServer = http.createServer(app);
 const io = new socketio.Server(httpServer);
+const videoQue =  [];
 
 export class Router {
   constructor() {
@@ -30,18 +31,20 @@ export class Router {
     });
   }
 
-  handleCommand = (message: string, socket: Socket) => {
+  handleCommand = ( message: string, socket: Socket) => {
     const strs = message.split(" ");
-
-    if (strs.length < 2) {
-      return;
-    }
+   //if (strs.length <2) {
+    //  return;
+    //}
 
     const command = strs[0].substring(1);
 
     if (command === "play") {
       io.emit("command", { command: "play", url: strs[1] });
+
+    videoQue.push(message)
     }
+    //console.log(message)
   };
 }
 
