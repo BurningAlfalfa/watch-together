@@ -3,7 +3,7 @@ import ReactPlayer from 'react-player'
 import React, { useEffect, useState } from "react";
 import { Button, TextField } from '@material-ui/core';
 import io from "socket.io-client";
-import { timeStamp } from "console";
+//import { timeStamp } from "console";
 
 const isDebug = true;
 const socketURL =
@@ -31,7 +31,11 @@ function App() {
     if (chatboxRef.current){
        chatboxRef.current.scrollTo(0,chatboxRef.current.scrollHeight)
     } 
-    
+    Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
+      get: function(){
+          return !!(this.currentTime > 0 && !this.paused && !this.ended && this.readyState > 2);
+      }
+  })
 
     }
     //when we receive a message...
@@ -74,9 +78,7 @@ function App() {
 
        socket.emit("chat-message",messageWithTime);
       }
-//i need the timed to be stamped after the command is done
-//no i need to make it so that if i use command i dont do time stamp
-
+// check if video is donw ot go to next video in Que
       setMessage("");
        // put the ddd here
     }
