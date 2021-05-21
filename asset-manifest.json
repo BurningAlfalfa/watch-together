@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/watch-together/static/css/main.bbfe190c.chunk.css",
+    "main.js": "/watch-together/static/js/main.edc75b6b.chunk.js",
+    "main.js.map": "/watch-together/static/js/main.edc75b6b.chunk.js.map",
+    "runtime-main.js": "/watch-together/static/js/runtime-main.58860ae2.js",
+    "runtime-main.js.map": "/watch-together/static/js/runtime-main.58860ae2.js.map",
+    "static/js/2.743c35a7.chunk.js": "/watch-together/static/js/2.743c35a7.chunk.js",
+    "static/js/2.743c35a7.chunk.js.map": "/watch-together/static/js/2.743c35a7.chunk.js.map",
+    "static/js/3.1cf464ea.chunk.js": "/watch-together/static/js/3.1cf464ea.chunk.js",
+    "static/js/3.1cf464ea.chunk.js.map": "/watch-together/static/js/3.1cf464ea.chunk.js.map",
+    "index.html": "/watch-together/index.html",
+    "static/css/main.bbfe190c.chunk.css.map": "/watch-together/static/css/main.bbfe190c.chunk.css.map",
+    "static/js/2.743c35a7.chunk.js.LICENSE.txt": "/watch-together/static/js/2.743c35a7.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.58860ae2.js",
+    "static/js/2.743c35a7.chunk.js",
+    "static/css/main.bbfe190c.chunk.css",
+    "static/js/main.edc75b6b.chunk.js"
+  ]
+}
