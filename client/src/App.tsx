@@ -31,12 +31,12 @@ function App() {
     if (chatboxRef.current){
        chatboxRef.current.scrollTo(0,chatboxRef.current.scrollHeight)
     } 
-    Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
-      get: function(){
-          return !!(this.currentTime > 0 && !this.paused && !this.ended && this.readyState > 2);
-      }
-  })
 
+    //Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
+      //get: function(){
+        //  return !!(this.currentTime > 0 && !this.paused && !this.ended && this.readyState > 2);
+      //}
+  //})
     }
     //when we receive a message...
     socket.on("chat-message", onChatMessage);
@@ -85,7 +85,10 @@ function App() {
  }
   return (
     <div className="App"> 
-    <ReactPlayer  classname="youtubePlayer" playing controls url={url} />
+    <ReactPlayer  className="youtubePlayer" playing controls url={url}  onEnded={()=>{
+        socket.emit("videoEnded")
+        console.log("its being called");
+      }}/>
     <div  ref={chatboxRef} className ="chatbox">
     {messages.map((message) => (
         <div>{message}</div>
@@ -94,14 +97,10 @@ function App() {
           <Button onClick={() => {
           socket.emit("chat-message",message );
         }}
-      >
+          >
         Send
-         
          </Button> 
-  <TextField onKeyDown={keyPress} type="text" value={message} onChange={handleChangeInput} ></TextField>
-
-      
-     
+      <TextField onKeyDown={keyPress} type="text" value={message} onChange={handleChangeInput} ></TextField>
     </div>
   );
 }
